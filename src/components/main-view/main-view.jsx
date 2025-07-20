@@ -160,4 +160,8 @@ return (
       )}
     </Row>
   );
+<<<<<<< Updated upstream
 };
+=======
+};
+>>>>>>> Stashed changes
