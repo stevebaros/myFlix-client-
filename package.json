@@ -16,8 +16,11 @@
   "homepage": "https://github.com/Marcin-Marcin-Marcin/myFlix-client#readme",
   "description": "",
   "dependencies": {
+    "bootstrap": "^5.3.7",
+    "prop-types": "^15.8.1",
     "react": "^19.1.0",
+    "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.0",
-    "prop-types": "^15.8.1"
+    "sass": "^1.89.2"
   }
 }
