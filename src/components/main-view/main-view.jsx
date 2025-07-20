@@ -1,41 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import Row from "react-bootstrap/Row";
-import Col from 'react-bootstrap/Col';
+import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
 export const MainView = () => {
-  const [movies, setMovies] = useState([
-    {
-      id: 1,
-      title: "Vertigo",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/7/75/Vertigomovie_restoration.jpg",
-      author: "Alfred Hitchcock"
-    },
-    {
-      id: 2,
-      title: "Rope",
-      image:
-        "https://upload.wikimedia.org/wikipedia/en/8/8e/Rope2.jpg",
-      author: "Alfred Hitchcock"
-    },
-    {
-      id: 3,
-      title: "All About My Mother",
-      image:
-        "https://upload.wikimedia.org/wikipedia/en/d/d7/All_about_my_mother.jpg",
-      author: "Pedro Almodovar"
-    },
-  ]);
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedToken = localStorage.getItem("token");
 
+  const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
-
 
   useEffect(() => {
     if (!token) return;
@@ -66,7 +45,6 @@ export const MainView = () => {
             setUser(user);
             setToken(token);
           }}
-      
         />
         <p className="separator">or</p>
         <SignupView />
@@ -77,7 +55,8 @@ export const MainView = () => {
   if (selectedMovie) {
     return (
       <>
-        <Button variant="secondary"
+        <Button
+          variant="secondary"
           onClick={() => {
             setUser(null);
             setToken(null);
@@ -87,7 +66,10 @@ export const MainView = () => {
           Logout
         </Button>
 
-        <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
+        <MovieView
+          movie={selectedMovie}
+          onBackClick={() => setSelectedMovie(null)}
+        />
       </>
     );
   }
@@ -95,7 +77,8 @@ export const MainView = () => {
   if (movies.length === 0) {
     return (
       <>
-        <Button variant="secondary"
+        <Button
+          variant="secondary"
           onClick={() => {
             setUser(null);
             setToken(null);
@@ -109,19 +92,37 @@ export const MainView = () => {
     );
   }
 
-  // Replaced with the React Boostrap compatible code
-  /*
   return (
-    <div>
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          movie={movie}
-          onMovieClick={(newSelectedMovie) => {
-            setSelectedMovie(newSelectedMovie);
-          }}
-        />
-      ))}
-    </div>
+    <Row className="justify-content-md-center">
+      {!user ? (
+        <Col md={5} className="mt-4">
+          <LoginView onLoggedIn={(user) => setUser(user)} />
+          <p className="text-center my-3">or</p>
+          <SignupView />
+        </Col>
+      ) : selectedMovie ? (
+        <Col md={8} className="mt-4">
+          <MovieView
+            movie={selectedMovie}
+            onBackClick={() => setSelectedMovie(null)}
+          />
+        </Col>
+      ) : movies.length === 0 ? (
+        <div className="text-center mt-5">The list is empty!</div>
+      ) : (
+        <>
+          {movies.map((movie) => (
+            <Col className="mb-4" key={movie.id} md={3}>
+              <MovieCard
+                movie={movie}
+                onMovieClick={(newSelectedMovie) => {
+                  setSelectedMovie(newSelectedMovie);
+                }}
+              />
+            </Col>
+          ))}
+        </>
+      )}
+    </Row>
   );
 };
